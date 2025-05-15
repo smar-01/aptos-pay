@@ -15,7 +15,7 @@ export function TopBanner() {
             >
               template docs
             </a>
-            {" "}to get started.
+            {" "} to get started.
           </span>
         </div>
         <div className="ml-4 flex-shrink-0"></div>
