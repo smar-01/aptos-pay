@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
-import { toast } from 'react-toastify';
+import { useToast } from "@/components/ui/use-toast";
 import { WalletDetails } from './WalletDetails';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
@@ -18,18 +18,57 @@ const creators: Creator[] = [
 
 export const FanDashboard = () => {
   const { account } = useWallet();
+  const { toast } = useToast();
   const [depositAmount, setDepositAmount] = useState('');
   const [selectedCreator, setSelectedCreator] = useState<Creator | null>(null);
   const [giftAmount, setGiftAmount] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleDeposit = async () => {
-    // TODO: Implement deposit logic
-    toast.success('✅ Deposit successful!');
+    if (!depositAmount) return;
+    setIsProcessing(true);
+    try {
+      // TODO: Implement deposit logic
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      toast({
+        title: "Deposit Successful! 🎉",
+        description: `${depositAmount} APT has been deposited into your account.`,
+        variant: "success",
+      });
+      setDepositAmount('');
+    } catch (error) {
+      toast({
+        title: "Deposit Failed",
+        description: "There was an error processing your deposit. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleGift = async () => {
-    // TODO: Implement gift logic
-    toast.success(`🎉 ${giftAmount} APT gifted to @${selectedCreator?.name}!`);
+    if (!selectedCreator || !giftAmount) return;
+    setIsProcessing(true);
+    try {
+      // TODO: Implement gift logic
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      toast({
+        title: "Gift Sent! 🎁",
+        description: `${giftAmount} APT has been gifted to @${selectedCreator.name}.`,
+        variant: "success",
+      });
+      setGiftAmount('');
+      setSelectedCreator(null);
+    } catch (error) {
+      toast({
+        title: "Gift Failed",
+        description: "There was an error sending your gift. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -54,9 +93,10 @@ export const FanDashboard = () => {
               />
               <button
                 onClick={handleDeposit}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                disabled={isProcessing || !depositAmount}
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Deposit
+                {isProcessing ? 'Processing...' : 'Deposit'}
               </button>
             </div>
           </div>
@@ -98,10 +138,10 @@ export const FanDashboard = () => {
 
           <button
             onClick={handleGift}
+            disabled={isProcessing || !selectedCreator || !giftAmount}
             className="w-full bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={!selectedCreator || !giftAmount}
           >
-            Gift Creator
+            {isProcessing ? 'Processing...' : 'Gift Creator'}
           </button>
         </CardContent>
       </Card>

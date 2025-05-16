@@ -15,11 +15,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
 function App() {
-  const { connected } = useWallet();
+  const { connected, disconnect } = useWallet();
   const [isCreator, setIsCreator] = useState(false);
 
   const toggleMode = () => {
     setIsCreator(!isCreator);
+  };
+
+  const handleDisconnect = () => {
+    disconnect();
   };
 
   return (
@@ -36,12 +40,20 @@ function App() {
           <div className="flex items-center space-x-4">
             <p className="text-gray-400">100% of your gift goes to the creator</p>
             {connected && (
-              <button
-                onClick={toggleMode}
-                className="text-sm text-blue-400 hover:text-blue-300"
-              >
-                Switch to {isCreator ? 'Fan' : 'Creator'} Mode
-              </button>
+              <>
+                <button
+                  onClick={toggleMode}
+                  className="text-sm text-blue-400 hover:text-blue-300"
+                >
+                  Switch to {isCreator ? 'Fan' : 'Creator'} Mode
+                </button>
+                <button
+                  onClick={handleDisconnect}
+                  className="text-sm text-red-400 hover:text-red-300"
+                >
+                  Disconnect
+                </button>
+              </>
             )}
           </div>
         </header>
