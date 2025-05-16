@@ -1,16 +1,25 @@
 ### README:
 
-### Demo Video
+### Demo Video:
+[30_sec_demo.zip](https://github.com/user-attachments/files/20256257/30_sec_demo.zip)
 
-### Screenshots of UI
 
-### Description of how your interaction with the relevant blockchain works
+### Screenshots of UI:
+<img width="1470" alt="Screenshot 2025-05-16 at 11 44 33 AM" src="https://github.com/user-attachments/assets/b440ffd9-921c-4ffd-8f52-8503824aa49a" />
+<img width="1470" alt="Screenshot 2025-05-16 at 11 44 55 AM" src="https://github.com/user-attachments/assets/90ebd90a-4822-47a2-b41f-a6d44190a246" />
+<img width="1470" alt="Screenshot 2025-05-16 at 11 45 17 AM" src="https://github.com/user-attachments/assets/022c7ff0-a872-4f6a-8783-f82044d9dca7" />
+<img width="1470" alt="Screenshot 2025-05-16 at 11 45 33 AM" src="https://github.com/user-attachments/assets/c4ba0692-68a3-4b21-96df-2fa4a62190c6" />
+
+
+### Description of how your interaction with the relevant blockchain works:
 All core flows—**deposit**, **gift**, and **withdraw**—are handled on-chain in our `vault` Move module at address `0x5ecadf08e0341796c5304f686d0272b9e467dbb321d53fc306ebffa7521e55d0`.  
 Our React/Next.js front end uses the Aptos TypeScript SDK and Wallet Adapter to:  
+
 1. **Connect a wallet**  
    ```ts
    import { useWallet } from "@aptos-labs/wallet-adapter-react";
    const { account, signAndSubmitTransaction } = useWallet();
+
    
 Build & submit transactions
 
@@ -71,4 +80,4 @@ Network configuration:
 - Default RPC: https://fullnode.devnet.aptoslabs.com
 - VAULT_ADDR and keys are stored in .env.local, so you can switch networks without code changes.
 
-### Video (With audio) explaining how demo works
+### Video (With audio) explaining how demo works:
