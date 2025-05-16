@@ -81,4 +81,4 @@ Network configuration:
 - VAULT_ADDR and keys are stored in .env.local, so you can switch networks without code changes.
 
 ### Video (With audio) explaining how demo works:
-(uploaded in the folder structure because file too big)
+https://youtu.be/41-KZ96i6nA
