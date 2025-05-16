@@ -5,7 +5,6 @@ import { AccountInfo } from "@/components/AccountInfo";
 import { Header } from "@/components/Header";
 import { MessageBoard } from "@/components/MessageBoard";
 import { NetworkInfo } from "@/components/NetworkInfo";
-import { TopBanner } from "@/components/TopBanner";
 import { TransferAPT } from "@/components/TransferAPT";
 import { WalletDetails } from "@/components/WalletDetails";
 import { FanDashboard } from "@/components/FanDashboard";
@@ -25,7 +24,6 @@ function App() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-      <TopBanner />
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <header className="flex items-center justify-between mb-16">
