@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
-import { toast } from 'react-toastify';
+import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
 interface CreatorStats {
@@ -10,14 +10,33 @@ interface CreatorStats {
 
 export const CreatorDashboard = () => {
   const { account } = useWallet();
+  const { toast } = useToast();
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [stats, setStats] = useState<CreatorStats>({ totalReceived: 0, pendingWithdrawals: 0 });
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleWithdraw = async () => {
-    // TODO: Implement withdraw logic
-    const fee = parseFloat(withdrawAmount) * 0.003; // 0.3% fee
-    const netAmount = parseFloat(withdrawAmount) - fee;
-    toast.success(`✅ ${netAmount} APT withdrawn (0.3% fee)`);
+    if (!withdrawAmount) return;
+    setIsProcessing(true);
+    try {
+      // TODO: Implement withdraw logic
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      const fee = parseFloat(withdrawAmount) * 0.003; // 0.3% fee
+      const netAmount = parseFloat(withdrawAmount) - fee;
+      toast({
+        title: "Withdrawal Successful! 💰",
+        description: `${netAmount.toFixed(3)} APT has been withdrawn (${fee.toFixed(3)} APT fee).`,
+      });
+      setWithdrawAmount('');
+    } catch (error) {
+      toast({
+        title: "Withdrawal Failed",
+        description: "There was an error processing your withdrawal. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -49,10 +68,10 @@ export const CreatorDashboard = () => {
             />
             <button
               onClick={handleWithdraw}
+              disabled={isProcessing || !withdrawAmount}
               className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!withdrawAmount}
             >
-              Withdraw
+              {isProcessing ? 'Processing...' : 'Withdraw'}
             </button>
           </div>
         </div>
