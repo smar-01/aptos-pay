@@ -1,40 +1,74 @@
-## Create Aptos Dapp Boilerplate Template
+### README:
 
-The Boilerplate template provides a starter dapp with all necessary dapp infrastructure and a simple wallet info implementation, transfer APT and a simple message board functionality to send and read a message on chain.
+### Demo Video
 
-## Read the Boilerplate template docs
-To get started with the Boilerplate template and learn more about the template functionality and usage, head over to the [Boilerplate template docs](https://learn.aptoslabs.com/en/dapp-templates/boilerplate-template) 
+### Screenshots of UI
 
+### Description of how your interaction with the relevant blockchain works
+All core flows—**deposit**, **gift**, and **withdraw**—are handled on-chain in our `vault` Move module at address `0x5ecadf08e0341796c5304f686d0272b9e467dbb321d53fc306ebffa7521e55d0`.  
+Our React/Next.js front end uses the Aptos TypeScript SDK and Wallet Adapter to:  
+1. **Connect a wallet**  
+   ```ts
+   import { useWallet } from "@aptos-labs/wallet-adapter-react";
+   const { account, signAndSubmitTransaction } = useWallet();
+   
+Build & submit transactions
 
-## The Boilerplate template provides:
+2. Deposit:
+      ```ts
+      const payload = {
+        type: "entry_function_payload",
+        function: `${VAULT_ADDR}::vault::deposit`,
+        type_arguments: [],
+        arguments: [String(amountOctas)], // e.g. "1000000000" for 10 APT
+      };
+      const tx = await signAndSubmitTransaction(payload);
+      await client.waitForTransaction(tx.hash);
+  
+  
+4. Gift:
+    ```ts
+    const payload = {
+      type: "entry_function_payload",
+      function: `${VAULT_ADDR}::vault::gift`,
+      type_arguments: [],
+      arguments: [
+        account.address,
+        recipientAddress,
+        String(amountOctas), // e.g. "500000000" for 5 APT
+      ],
+    };
+    const tx = await signAndSubmitTransaction(payload);
+    await client.waitForTransaction(tx.hash);
+  
+6. Withdraw:
+    ```ts
+    const payload = {
+      type: "entry_function_payload",
+      function: `${VAULT_ADDR}::vault::withdraw`,
+      type_arguments: [],
+      arguments: [String(amountOctas)],
+    };
+    const tx = await signAndSubmitTransaction(payload);
+    await client.waitForTransaction(tx.hash);
+    // 0.3% fee automatically retained on-chain
+  
+  
+8. Fetch on-chain state:
+    ```ts
+    const userRes = await client.getAccountResource(
+      account.address,
+      `${VAULT_ADDR}::vault::Balance`
+    );
+    const poolRes = await client.getAccountResource(
+      VAULT_ADDR,
+      `${VAULT_ADDR}::vault::Pool`
+    );
+    // parse userRes.data.amount and poolRes.data.coins.value to update UI
+   
 
-- **Folder structure** - A pre-made dapp folder structure with a `src` (frontend) and `contract` folders.
-- **Dapp infrastructure** - All required dependencies a dapp needs to start building on the Aptos network.
-- **Wallet Info implementation** - Pre-made `WalletInfo` components to demonstrate how one can use to read a connected Wallet info.
-- **Transfer APT implementation** - Pre-made `transfer` components to send APT to an address.
-- **Message board functionality implementation** - Pre-made `message` components to send and read a message on chain
+Network configuration:
+- Default RPC: https://fullnode.devnet.aptoslabs.com
+- VAULT_ADDR and keys are stored in .env.local, so you can switch networks without code changes.
 
-
-## What tools the template uses?
-
-- React framework
-- shadcn/ui + tailwind for styling
-- Aptos TS SDK
-- Aptos Wallet Adapter
-- Node based Move commands
-- [Next-pwa](https://ducanh-next-pwa.vercel.app/)
-
-## What Move commands are available?
-
-The tool utilizes [aptos-cli npm package](https://github.com/aptos-labs/aptos-cli) that lets us run Aptos CLI in a Node environment.
-
-Some commands are built-in the template and can be ran as a npm script, for example:
-
-- `npm run move:publish` - a command to publish the Move contract
-- `npm run move:test` - a command to run Move unit tests
-- `npm run move:compile` - a command to compile the Move contract
-- `npm run move:upgrade` - a command to upgrade the Move contract
-- `npm run dev` - a command to run the frontend locally
-- `npm run deploy` - a command to deploy the dapp to Vercel
-
-For all other available CLI commands, can run `npx aptos` and see a list of all available commands.
+### Video (With audio) explaining how demo works
